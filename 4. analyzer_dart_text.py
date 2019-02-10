@@ -23,10 +23,10 @@ def progressBar(value, endvalue, bar_length=20):
 
 
 ## 데이터 받기
-data = pd.read_excel("dart_text_half.xlsx", encoding = 'UTF-8')
+data = pd.read_excel("sample2_text.xlsx", encoding = 'UTF-8')
 data.head()
 # 텍스트만
-text = data["텍스트"]
+text = data["text"]
 # 텍스트 확인 - 길 수 있음
 text[0]
 
@@ -150,12 +150,12 @@ for tmp in text_tag:
     tmp2 = nltk.Text(tmp)
     text_list.append(tmp2)
 # 단어 확인(가장 많이 나오는 단어 순)
-text_list[4000].vocab()
+text_list[0].vocab()
 
 ## 불용어 제거
 text_vocab, text_ko = [], []
 # 불용어 리스트 (본인의 판단에 따라 더 추가 가능) : 텍스트 분석에 필요가 없거나 사업보고서 특성상 당연히 많이 나와 분석에 의미 없는 단어들
-stop_words = ['사항','제기','및','년','사업','관','그','등','것','및','부','수','위','나','대하']
+stop_words = ['사항','제기','사업','대하']
 for tmp in text_list:
     ko = [word for word in tmp if word not in stop_words] # 불용어 제거
     ko = nltk.Text(ko) # 텍스트의 단어들만 가져옴
@@ -234,6 +234,6 @@ data2.head()
 data2.tail()
 
 ## 엑셀로 저장
-writer = pd.ExcelWriter('./dart_text_wordcnt.xlsx')
+writer = pd.ExcelWriter('./sample2_text_wordcnt2.xlsx')
 data2.to_excel(writer,'Sheet1')
 writer.save()
