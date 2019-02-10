@@ -97,18 +97,20 @@ def crawler_dart_text(crp_lists):
 
 
 if __name__ == "__main__":
-    # 크롤링했던 회사들의 사업보고서 리스트 가져오기
-    crplist_filename = input("사업보고서 리스트(crp_list) 파일명 : ")
-    crp_lists = pd.read_excel(crplist_filename+".xlsx")
-    crp_lists = dat[['crp_nm','crp_cd','rcp_dt','rpt_nm','rcp_no']].values.tolist()
+    # 크롤링했던 회사들의 사업보고서 리스트(확장자포함입력) 가져오기
+    crplist_filename = input("사업보고서 리스트(crp_list).xlsx : ")
+    crp_lists = pd.read_excel(crplist_filename)
+    crp_lists = crp_lists[['crp_nm','crp_cd','rcp_dt','rpt_nm','rcp_no']].values.tolist()
+    
+    ## 결과를 저장할 파일 이름(확장자 포함)
+    filename = input("My result file name.xlsx: ")
     
     dart_text = crawler_dart_text(crp_lists)
     
-    ## 결과를 저장할 파일 이름(확장자 빼고)
-    filename = input("My result file name: ")
+
     
     # 데이터(사업보고서 리스트) 엑셀로 저장
-    writer = pd.ExcelWriter(filename+'.xlsx')
+    writer = pd.ExcelWriter(filename)
     dart_text.to_excel(writer, 'Sheet1')
     writer.save()
     
