@@ -19,15 +19,26 @@ def progressBar(value, endvalue, bar_length=20):
     sys.stdout.flush()
 
 
+
 ## 1. 상장법인목록에 있는 기업들의 사업보고서 목록 크롤링
     
-# 예시 url: http://dart.fss.or.kr/api/search.xml?auth=__&crp_cd=005930&start_dt=20140101&bsn_tp=A001
+# 예시 url: http://dart.fss.or.kr/api/search.xml?auth=a2f0104fc81d7dc05f8817768aae6c55169516a6&crp_cd=005930&start_dt=20140101&bsn_tp=A001
 
 # -- 검색 시작 날짜 (예시 : 20140101)
 # -- 검색 종료 날짜
 # -- crp_name: 확인하고 싶은 회사 이름, 입력하지 않으면 상장법인목록에 있는 모든 회사
-def crawler_dart_crp_list(start_date, end_date, crp_name=None):
+# -- crp_codes_file_name: 확인하고 싶은 상장법인목록 엑셀 파일 이름. 입력하지 않으면 그냥 '상장법인목록'
+def crawler_dart_crp_list(start_date, end_date, crp_name=None, crp_codes_file_name=None):
     print("---사업보고서 리스트 가져오기---")
+    
+    if crp_codes_file_name is None:
+        company_codes = pd.read_excel('상장법인목록.xlsx', \
+                                  converters={'종목코드': str})[["회사명","종목코드"]]
+    else:
+        company_codes = pd.read_excel(crp_codes_file_name, \
+                                  converters={'종목코드': str})[["회사명","종목코드"]]
+
+    
     if crp_name is not None:
         company_codes = pd.DataFrame(company_codes.iloc[list(np.where(company_codes["회사명"]==crp_name)[0])])
     
@@ -69,29 +80,21 @@ def crawler_dart_crp_list(start_date, end_date, crp_name=None):
     return df
 
 if __name__ == "__main__":
+        
     ## API key
-    # 자신의 API key가 적혀있는 텍스트 파일 이름(확장자 빼고)
-    with open(input("My txt file name for API key : ")+".txt",'r') as f:
+    # 자신의 API key가 적혀있는 텍스트 파일 이름(확장자 포함)
+    with open(input("My txt file name for API key.txt : "),'r') as f:
         auth_key = f.read()
     
-    ## 상장법인목록: KIND 의 상장법인목록의 종목코드 이용
-    # http://kind.krx.co.kr/corpgeneral/corpList.do?method=loadInitPage
-    company_codes = pd.read_excel('상장법인목록.xlsx', converters={'종목코드': str})[["회사명","종목코드"]]
+    ## 결과를 저장할 파일 이름(확장자 포함)
+    filename = input("My result file name.xlsx: ")
     
-    ## 결과를 저장할 파일 이름(확장자 빼고)
-    filename = input("My result file name: ")
-    
-    result = crawler_dart_crp_list(20150101,20181231,'삼성전자') # 예시
+    result = crawler_dart_crp_list(20150101,20181231,'LG전자') # 예시
+    # result = crawler_dart_crp_list(20150101,20181231)
+    # result = crawler_dart_crp_list(20150101,20181231,crp_codes_file_name='상장법인목록.xlsx')
         
     # 데이터(사업보고서 리스트) 엑셀로 저장
-    writer = pd.ExcelWriter(filename+'.xlsx')
+    writer = pd.ExcelWriter(filename)
     result.to_excel(writer, 'Sheet1')
     writer.save()
-    
-
-
-
-
-    
-    
     
