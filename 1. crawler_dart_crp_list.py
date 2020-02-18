@@ -22,7 +22,7 @@ def progressBar(value, endvalue, bar_length=20):
 
 ## 1. 상장법인목록에 있는 기업들의 사업보고서 목록 크롤링
     
-# 예시 url: http://dart.fss.or.kr/api/search.xml?auth=a2f0104fc81d7dc05f8817768aae6c55169516a6&crp_cd=005930&start_dt=20140101&bsn_tp=A001
+# 예시 url: http://dart.fss.or.kr/api/search.xml?auth=API_KEY&crp_cd=005930&start_dt=20140101&bsn_tp=A001
 
 # -- 검색 시작 날짜 (예시 : 20140101)
 # -- 검색 종료 날짜
